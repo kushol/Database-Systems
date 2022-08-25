@@ -1,0 +1,41 @@
+-- 7(a)
+/* Find product code, product name of those whose buy prices are not within 
+the ranges of 90 and 100. */
+
+select products.productCode, products.productName
+from products
+where products.buyPrice not between 90 and 100;
+
+-- 7(b)
+/* List all product name and product vendor of those whose name contains the
+substring ‘Ford’ or vendor is ‘Second Gear Diecast’.*/
+
+select products.productName, products.productVendor
+from products
+where products.productName like "%Ford%" or 
+	  products.productVendor = "Second Gear Diecast";
+
+-- 7(c)
+/* List the name of unique countries where an office is located. */
+
+select distinct offices.country from offices;
+
+-- 7(d)
+/* Find order number, order date and customer name of those whose customers are
+based in Australia. */
+
+select orders.orderNumber, orders.orderDate, customers.customerName
+from orders, customers
+where orders.customerNumber = customers.customerNumber
+and customers.country = "Australia";
+
+-- 7(e)
+/* Find product name, vendor name of products which are shipped in 2005. */
+-- product name, vendor name are in the product table
+-- shipped date is in the orders table
+-- order details table connects orders with product
+select products.productName, products.productVendor
+from products, orders, orderdetails
+where products.productCode = orderdetails.productCode
+and orderdetails.orderNumber = orders.orderNumber
+and year(orders.shippedDate) = 2005;
