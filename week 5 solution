@@ -39,3 +39,50 @@ from products, orders, orderdetails
 where products.productCode = orderdetails.productCode
 and orderdetails.orderNumber = orders.orderNumber
 and year(orders.shippedDate) = 2005;
+
+-- Week 6 solution
+
+-- Task 7(i)
+select offices.*
+from offices
+where offices.country not in ('USA', 'France');
+
+-- Task 7(ii)
+select orderdetails.orderNumber, orderdetails.productCode,
+		orderdetails.quantityOrdered*orderdetails.priceEach 
+        as `Amount Payable` -- 'as' is optional here 
+from orderdetails;
+
+-- Task 7(iii)
+-- calculating for all the products for each order
+select orderdetails.orderNumber,  
+		sum(orderdetails.quantityOrdered*orderdetails.priceEach) 
+		as `Total Amount Payable` -- sums up Amount Payable for each product
+from orderdetails
+group by orderdetails.orderNumber; -- for each order
+
+-- Task 7(iv)
+-- we have to bring customer name from customer table
+select orderdetails.orderNumber, customers.customerName, 
+		sum(orderdetails.quantityOrdered*orderdetails.priceEach) 
+		as `Total Amount Payable` -- sums up Amount Payable for each product
+from orderdetails, orders, customers
+where orderdetails.orderNumber = orders.orderNumber 
+		-- joining orderdetails with order
+and orders.customerNumber = customers.customerNumber
+		-- joining orders with customer
+group by orderdetails.orderNumber; -- for each order
+
+-- Task 7(v)
+select orderdetails.orderNumber, orders.orderDate, customers.customerName, 
+		sum(orderdetails.quantityOrdered*orderdetails.priceEach) 
+		as `Total Amount Payable` -- sums up Amount Payable for each product
+from orderdetails, orders, customers
+where orderdetails.orderNumber = orders.orderNumber 
+		-- joining orderdetails with order
+and orders.customerNumber = customers.customerNumber
+		-- joining orders with customer
+and customers.country = 'Australia'        
+group by orderdetails.orderNumber
+order by `Total Amount Payable` desc
+limit 5; -- for each order
